@@ -122,7 +122,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
     const [answers, setAnswers] = useState<number[]>([]);
     const [result, setResult] = useState('');
     const [score, setScore] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isWaitingForAPI, setIsWaitingForAPI] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -143,7 +143,8 @@ const LoveQuizGlassmorphism: React.FC = () => {
             const totalScore = newAnswers.reduce((sum, curr) => sum + curr, 0);
             const percentageScore = (totalScore / (questions.length * 5)) * 100;
             setScore(Math.round(percentageScore));
-            setIsLoading(true);
+            setIsWaitingForAPI(true);
+            setStep(step + 1); // Move to the result step immediately
             analyzeLoveCompatibility(percentageScore);
         }
     };
@@ -166,35 +167,46 @@ const LoveQuizGlassmorphism: React.FC = () => {
     
             const text = response.choices[0].message.content || '';
             setResult(text);
-            setIsLoading(false);
-            setTimeout(() => {
-                setShowResult(true);
-                setStep(step + 1);
-            }, 500);
+            setIsWaitingForAPI(false);
+            setShowResult(true);
         } catch (error) {
             console.error('Error:', error);
             setResult('An error occurred. Please try again.');
-            setIsLoading(false);
-            setTimeout(() => {
-                setShowResult(true);
-            }, 500);
+            setIsWaitingForAPI(false);
+            setShowResult(true);
         }
     };
 
     const shareResult = (platform: 'facebook' | 'twitter' | 'email') => {
         const message = `I just took the Love Compatibility Quiz with ${person2}! Our score: ${score}%. Find out your love compatibility too!`;
-        const url = window.location.href;
-
+        const url = encodeURIComponent(window.location.href);
+        const encodedMessage = encodeURIComponent(message);
+    
+        let shareUrl = '';
+    
         switch (platform) {
             case 'facebook':
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(message)}`, '_blank');
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodedMessage}`;
                 break;
             case 'twitter':
-                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${url}`, '_blank');
+                shareUrl = `https://twitter.com/intent/tweet?text=${encodedMessage}&url=${url}`;
                 break;
             case 'email':
-                window.location.href = `mailto:?subject=Love Compatibility Quiz&body=${encodeURIComponent(message + ' ' + url)}`;
+                shareUrl = `mailto:?subject=${encodeURIComponent('Love Compatibility Quiz')}&body=${encodedMessage}%20${url}`;
                 break;
+        }
+    
+        if (shareUrl) {
+            try {
+                if (platform === 'email') {
+                    window.location.href = shareUrl;
+                } else {
+                    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+                }
+            } catch (error) {
+                console.error('Error sharing:', error);
+                alert('Unable to open share dialog. Please try again or use a different sharing method.');
+            }
         }
     };
 
@@ -206,7 +218,6 @@ const LoveQuizGlassmorphism: React.FC = () => {
         setAnswers([]);
         setResult('');
         setScore(0);
-        setIsLoading(false);
         setShowResult(false);
         setStep(0);
     };
@@ -277,7 +288,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
                             exit={{ opacity: 0 }}
                         >
                             <h3 className="text-2xl font-semibold mb-4 text-white text-center">Your Love Compatibility Score: {score}%</h3>
-                            {isLoading ? (
+                            {isWaitingForAPI ? (
                                 <div className="flex justify-center items-center">
                                     <motion.div
                                         className="w-16 h-16 border-4 border-t-pink-500 border-r-purple-400 border-b-rose-500 border-l-indigo-500 border-solid rounded-full"
