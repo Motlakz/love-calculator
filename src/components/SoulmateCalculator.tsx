@@ -103,6 +103,7 @@ const SoulmateCalculator: React.FC = () => {
 
 const HeartParticles: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({ containerRef }) => {
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+    const size = Math.random() * 15 + 5;
 
     useEffect(() => {
         const updateSize = () => {
@@ -126,7 +127,7 @@ const HeartParticles: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }
                     key={i}
                     className="absolute text-rose-300 text-opacity-30 select-none"
                     style={{
-                        fontSize: `${Math.random() * 20 + 10}px`,
+                        fontSize: `${size}px`,
                     }}
                     initial={{ 
                         x: Math.random() * containerSize.width,
