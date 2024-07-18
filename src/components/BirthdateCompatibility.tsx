@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBirthdayCake, FaHeart, FaStar, FaStarAndCrescent } from 'react-icons/fa';
+import { FaBirthdayCake, FaStar, FaStarAndCrescent,FaMoon } from 'react-icons/fa';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -52,7 +52,7 @@ const Result: React.FC<{ content: string }> = ({ content }) => (
 );
 
 const FloatingIcon: React.FC<{ index: number }> = ({ index }) => {
-    const icons = [FaStar, FaStarAndCrescent, FaHeart];
+    const icons = [FaStar, FaMoon];
     const Icon = icons[Math.floor(Math.random() * icons.length)];
     const size = Math.random() * 20 + 10; // Random size between 10px and 30px
     

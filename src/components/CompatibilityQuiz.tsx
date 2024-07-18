@@ -396,7 +396,7 @@ const HeartParticles: React.FC<HeartParticlesProps> = ({ containerRef }) => {
                       repeatType: "loop"
                   }}
               >
-                  ❤
+                  👩‍❤️‍👨
               </motion.div>
           ))}
       </div>

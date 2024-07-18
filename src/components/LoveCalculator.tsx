@@ -105,7 +105,7 @@ const StarryHeart: React.FC<{ index: number }> = ({ index }) => {
                 delay: index * 0.2
             }}
         >
-            ✨❤️
+            <FaHeart />
         </motion.div>
     );
 };
