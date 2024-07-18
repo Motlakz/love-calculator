@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.highlight {
+  text-shadow: 1px 1px 1px #000;
+}
+
+.custom-select-open::-webkit-scrollbar {
+  background-color: rgb(233, 130, 233);
+  border-radius: 30px;
+  width: 6px;
+}
+
+.custom-select-open::-webkit-scrollbar-thumb {
+  background-color: indigo;
+  border-radius: 30px;
+}
