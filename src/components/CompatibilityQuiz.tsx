@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown } from 'react-icons/fa';
+import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -137,6 +138,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
     const handleAnswer = (answer: number) => {
         const newAnswers = [...answers, answer];
         setAnswers(newAnswers);
+        logEvent(analytics, 'quiz_answer', { question: questions[step], answer });
         if (newAnswers.length < questions.length) {
             setStep(step + 1);
         } else {
@@ -167,6 +169,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
     
             const text = response.choices[0].message.content || '';
             setResult(text);
+            logEvent(analytics, 'quiz_result', { person1, person2, loveLanguage1, loveLanguage2, score: percentageScore, result: text });
             setIsWaitingForAPI(false);
             setShowResult(true);
         } catch (error) {
@@ -203,6 +206,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
                 } else {
                     window.open(shareUrl, '_blank', 'noopener,noreferrer');
                 }
+                logEvent(analytics, 'share_result', { platform, person1, person2, score });
             } catch (error) {
                 console.error('Error sharing:', error);
                 alert('Unable to open share dialog. Please try again or use a different sharing method.');
@@ -220,6 +224,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
         setScore(0);
         setShowResult(false);
         setStep(0);
+        logEvent(analytics, 'quiz_restart', { person1, person2 });
     };
 
     return (

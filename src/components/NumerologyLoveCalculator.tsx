@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaSortNumericUp, FaSortNumericUpAlt } from 'react-icons/fa';
+import { logEvent, analytics } from '../firebase';
 
 const getNumerologyNumber = (name: string): number => {
     const numerologyMap: { [key: string]: number } = {
@@ -91,6 +92,7 @@ const NumerologyLoveCalculator: React.FC = () => {
         
         const description = getCompatibilityDescription(score);
         setResult({ score, description });
+        logEvent(analytics, 'calculate_numerology_compatibility', { name1, name2, score, description });
     };
 
     return (

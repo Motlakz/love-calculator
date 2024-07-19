@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBirthdayCake, FaStar, FaStarAndCrescent,FaMoon } from 'react-icons/fa';
+import { FaBirthdayCake, FaStar, FaStarAndCrescent, FaMoon } from 'react-icons/fa';
+import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -105,6 +106,7 @@ const BirthdateCompatibility: React.FC = () => {
             return;
         }
         setIsLoading(true);
+        logEvent(analytics, 'calculate_compatibility_click', { date1, date2 });
         try {
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo",
@@ -121,6 +123,7 @@ const BirthdateCompatibility: React.FC = () => {
             });
 
             setResult(response.choices[0].message.content || '');
+            logEvent(analytics, 'compatibility_result', { date1, date2, result: response.choices[0].message.content });
         } catch (error) {
             console.error('Error:', error);
             setResult('An error occurred. Please try again.');

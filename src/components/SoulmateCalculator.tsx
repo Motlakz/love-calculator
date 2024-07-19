@@ -1,8 +1,10 @@
+// components/SoulmateCalculator.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInfinity } from 'react-icons/fa';
+import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -38,6 +40,7 @@ const SoulmateCalculator: React.FC = () => {
 
     const calculateSoulmate = async () => {
         setIsLoading(true);
+        logEvent(analytics, 'calculate_soulmate_click', { name, birthdate });
         try {
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo",
@@ -54,6 +57,7 @@ const SoulmateCalculator: React.FC = () => {
             });
 
             setResult(response.choices[0].message.content || '');
+            logEvent(analytics, 'soulmate_result', { name, birthdate, result: response.choices[0].message.content });
         } catch (error) {
             console.error('Error:', error);
             setResult('An error occurred. Please try again.');

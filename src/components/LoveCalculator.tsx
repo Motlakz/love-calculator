@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown } from 'react-icons/fa';
 import axios from 'axios';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
+import { logEvent, analytics } from '../firebase';
 
 interface InputProps {
     placeholder: string;
@@ -200,6 +201,7 @@ const LoveCalculator: React.FC = () => {
         const finalScore = Math.max(0, Math.min(100, baseScore));
         
         setResult(finalScore);
+        logEvent(analytics, 'calculate_love_click', { name1, name2, relationshipStatus });
 
         try {
             const response = await axios.post('https://api.openai.com/v1/chat/completions', {
@@ -223,6 +225,7 @@ const LoveCalculator: React.FC = () => {
             const [adviceResponse, quoteResponse] = content.split('\n\n');
             setAdvice(adviceResponse.replace('Advice: ', ''));
             setQuote(quoteResponse.replace('Quote: ', ''));
+            logEvent(analytics, 'love_result', { name1, name2, relationshipStatus, result: finalScore, advice: adviceResponse, quote: quoteResponse });
         } catch (error) {
             console.error('Error fetching advice:', error);
             setAdvice('Love is a journey. Enjoy every step!');

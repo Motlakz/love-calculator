@@ -1,8 +1,10 @@
+// components/ZodiacLoveCalculator.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
+import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -119,6 +121,7 @@ const ZodiacLoveCalculator: React.FC = () => {
         }
         setIsLoading(true);
         const score = Math.floor(Math.random() * 101);
+        logEvent(analytics, 'calculate_zodiac_compatibility_click', { sign1, sign2 });
 
         try {
             const response = await openai.chat.completions.create({
@@ -137,6 +140,7 @@ const ZodiacLoveCalculator: React.FC = () => {
 
             const text = response.choices[0].message.content || '';
             setResult(`Compatibility: ${score}%\n\n${text}`);
+            logEvent(analytics, 'zodiac_compatibility_result', { sign1, sign2, score, result: text });
         } catch (error) {
             console.error('Error:', error);
             setResult('An error occurred. Please try again.');
