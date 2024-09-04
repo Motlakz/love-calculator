@@ -43,7 +43,7 @@ const SoulmateCalculator: React.FC = () => {
         logEvent(analytics, 'calculate_soulmate_click', { name, birthdate });
         try {
             const response = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages: [
                     {
                         role: "system",

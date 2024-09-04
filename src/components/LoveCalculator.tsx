@@ -205,7 +205,7 @@ const LoveCalculator: React.FC = () => {
 
         try {
             const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages: [{
                     role: "system",
                     content: "You are a relationship advisor. Provide advice and a love quote based on the given love percentage and relationship status."

@@ -109,7 +109,7 @@ const BirthdateCompatibility: React.FC = () => {
         logEvent(analytics, 'calculate_compatibility_click', { date1, date2 });
         try {
             const response = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages: [
                     {
                         role: "system",
