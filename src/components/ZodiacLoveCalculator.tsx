@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaStar, FaHeart } from 'react-icons/fa';
+import { FaStar } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -162,7 +162,7 @@ const ZodiacLoveCalculator: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                   <FaHeart className="mr-2" /> Cosmic Love Oracle
+                   <FaStar className="mr-2" /> Cosmic Love Oracle
                 </motion.h1>
                 <ZodiacSelect value={sign1} onChange={setSign1} placeholder="Choose your sign" />
                 <ZodiacSelect value={sign2} onChange={setSign2} placeholder="Choose your partner's sign" />
