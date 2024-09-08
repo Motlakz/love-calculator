@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown } from 'react-icons/fa';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown, FaHourglass } from 'react-icons/fa';
 import axios from 'axios';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { logEvent, analytics } from '../firebase';
@@ -29,12 +29,13 @@ const NameInput: React.FC<InputProps> = ({ placeholder, value, onChange, icon })
     </motion.div>
 );
 
-const Button: React.FC<{ onClick: () => void; children: React.ReactNode }> = ({ onClick, children }) => (
+const Button: React.FC<{ onClick: () => void; children: React.ReactNode; disabled?: boolean }> = ({ onClick, children, disabled }) => (
     <motion.button
         onClick={onClick}
         className="w-full bg-red-500 bg-opacity-70 text-white p-3 rounded-lg font-bold hover:bg-opacity-80 transition duration-300 backdrop-blur-sm flex items-center justify-center"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        disabled={disabled}
     >
         <FaHeart className="mr-2" />
         {children}
@@ -179,29 +180,48 @@ const LoveCalculator: React.FC = () => {
     const [advice, setAdvice] = useState('');
     const [quote, setQuote] = useState('');
     const [relationshipStatus, setRelationshipStatus] = useState('');
+    const [timeTogether, setTimeTogether] = useState('');
+    const [isCalculating, setIsCalculating] = useState(false);
+    const [showExplanation, setShowExplanation] = useState(false);
+    const controls = useAnimation();
 
     const relationshipOptions = [
         { value: "crushing", label: "Crushing" },
         { value: "dating", label: "Dating" },
         { value: "committed", label: "Committed Relationship" },
         { value: "married", label: "Married" },
+        { value: "longDistance", label: "Long Distance" },
+        { value: "complicated", label: "It's Complicated" },
     ];
 
     const calculateLove = async () => {
-        if (name1.trim() === '' || name2.trim() === '') {
-            alert('Please enter both names');
+        if (name1.trim() === '' || name2.trim() === '' || !relationshipStatus) {
+            alert('Please fill in all fields');
             return;
         }
-        
+
+        setIsCalculating(true);
+        await controls.start({
+            scale: [1, 1.2, 1],
+            rotate: [0, 360, 0],
+            transition: { duration: 2 }
+        });
+
         const set1 = new Set(name1.toLowerCase());
         const set2 = new Set(name2.toLowerCase());
         const commonLetters = [...set1].filter(letter => set2.has(letter)).length;
         const lengthFactor = Math.abs(name1.length - name2.length);
-        const baseScore = (commonLetters * 10) - lengthFactor + Math.floor(Math.random() * 20);
-        const finalScore = Math.max(0, Math.min(100, baseScore));
+        
+        // Enhanced scoring algorithm
+        const nameScore = (commonLetters * 10) - lengthFactor;
+        const relationshipScore = getRelationshipScore(relationshipStatus);
+        const timeTogetherScore = calculateTimeTogetherScore(timeTogether);
+        
+        const baseScore = (nameScore + relationshipScore + timeTogetherScore) / 4;
+        const finalScore = Math.max(0, Math.min(100, Math.round(baseScore)));
         
         setResult(finalScore);
-        logEvent(analytics, 'calculate_love_click', { name1, name2, relationshipStatus });
+        logEvent(analytics, 'calculate_love_click', { name1, name2, relationshipStatus, timeTogether });
 
         try {
             const response = await axios.post('https://api.openai.com/v1/chat/completions', {
@@ -231,6 +251,26 @@ const LoveCalculator: React.FC = () => {
             setAdvice('Love is a journey. Enjoy every step!');
             setQuote('Where there is love, there is life. - Mahatma Gandhi');
         }
+
+        setIsCalculating(false);
+    };
+
+    const getRelationshipScore = (status: string) => {
+        const scores: {[key: string]: number} = {
+            "crushing": 60,
+            "dating": 70,
+            "committed": 80,
+            "married": 90,
+            "longDistance": 75,
+            "complicated": 50
+        };
+        return scores[status] || 50;
+    };
+
+    const calculateTimeTogetherScore = (time: string) => {
+        const [value, unit] = time.split(' ');
+        const months = unit === 'years' ? parseInt(value) * 12 : parseInt(value);
+        return Math.min(100, months * 2);
     };
 
     return (
@@ -252,7 +292,7 @@ const LoveCalculator: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                    <FaHeart className="mr-2" /> Love Calculator
+                    <FaHeart className="inline-block mr-2" /> Love Calculator
                 </motion.h1>
                 <NameInput placeholder="Enter your name" value={name1} onChange={setName1} icon={<FaHeart className='text-white' />} />
                 <NameInput placeholder="Enter love interest's name" value={name2} onChange={setName2} icon={<FaHeart className='text-white' />} />
@@ -261,9 +301,38 @@ const LoveCalculator: React.FC = () => {
                     onChange={setRelationshipStatus}
                     options={relationshipOptions}
                 />
-                <Button onClick={calculateLove}>Calculate Love</Button>
+                <NameInput placeholder="Time together (e.g., 2 years)" value={timeTogether} onChange={setTimeTogether} icon={<FaHourglass className='text-white' />} />
+                <Button onClick={calculateLove} disabled={isCalculating}>
+                    {isCalculating ? 'Calculating...' : 'Calculate Love'}
+                </Button>
                 <AnimatePresence>
-                    {result > 0 && <Result percentage={result} advice={advice} quote={quote} />}
+                    {result > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                        >
+                            <Result percentage={result} advice={advice} quote={quote} />
+                            <motion.button
+                                className="mt-4 text-white underline"
+                                onClick={() => setShowExplanation(!showExplanation)}
+                            >
+                                {showExplanation ? 'Hide' : 'Show'} Explanation
+                            </motion.button>
+                            <AnimatePresence>
+                                {showExplanation && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="mt-2 text-white text-sm"
+                                    >
+                                        This score is calculated based on name compatibility, relationship status, and time spent together. It's just for fun and not scientifically accurate!
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
             </motion.div>
         </div>

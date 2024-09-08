@@ -1,9 +1,8 @@
-// components/ZodiacLoveCalculator.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaHeart } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -163,12 +162,18 @@ const ZodiacLoveCalculator: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                   <FaStar className="mr-2" /> Celestial Love Alignment
+                   <FaHeart className="mr-2" /> Cosmic Love Oracle
                 </motion.h1>
-                <ZodiacSelect value={sign1} onChange={setSign1} placeholder="Select first zodiac sign" />
-                <ZodiacSelect value={sign2} onChange={setSign2} placeholder="Select second zodiac sign" />
+                <ZodiacSelect value={sign1} onChange={setSign1} placeholder="Choose your sign" />
+                <ZodiacSelect value={sign2} onChange={setSign2} placeholder="Choose your partner's sign" />
                 <Button onClick={calculateZodiacCompatibility}>
-                    {isLoading ? "Consulting the cosmos..." : "Reveal Cosmic Compatibility"}
+                    {isLoading ? (
+                        <>
+                            <p>Aligning the stars...</p>
+                        </>
+                    ) : (
+                        <>Unveil Your Cosmic Connection</>
+                    )}
                 </Button>
                 <AnimatePresence>
                     {result && (
@@ -179,6 +184,7 @@ const ZodiacLoveCalculator: React.FC = () => {
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.3 }}
                         >
+                            <h2 className="text-2xl font-bold text-indigo-300 mb-2">Celestial Verdict</h2>
                             <p className="text-indigo-100 whitespace-pre-wrap">{result}</p>
                         </motion.div>
                     )}

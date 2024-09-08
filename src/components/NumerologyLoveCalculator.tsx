@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaSortNumericUp, FaSortNumericUpAlt } from 'react-icons/fa';
+import { FaSortNumericUp, FaInfoCircle, FaSortNumericUpAlt } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 
 const getNumerologyNumber = (name: string): number => {
@@ -81,6 +81,7 @@ const NumerologyLoveCalculator: React.FC = () => {
     const [name1, setName1] = useState('');
     const [name2, setName2] = useState('');
     const [result, setResult] = useState<{ score: number; description: string } | null>(null);
+    const [showInfo, setShowInfo] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const calculateNumerologyCompatibility = () => {
@@ -110,12 +111,42 @@ const NumerologyLoveCalculator: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                   <FaSortNumericUpAlt/> Mystical Numerology Harmony
+                   <FaSortNumericUpAlt className="inline-block mr-2" /> Mystical Numerology Harmony
                 </motion.h1>
+                <motion.p 
+                    className="text-blue-600 bg-blue-100 rounded p-2 mb-4 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                    Discover the cosmic connection between two souls
+                </motion.p>
                 <NameInput placeholder="Enter first name" value={name1} onChange={setName1} />
                 <NameInput placeholder="Enter second name" value={name2} onChange={setName2} />
-                <Button onClick={calculateNumerologyCompatibility}>Discover Your Harmony</Button>
+                <Button onClick={calculateNumerologyCompatibility}>
+                    Reveal Your Cosmic Bond
+                </Button>
                 {result && <Result score={result.score} description={result.description} />}
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="absolute top-2 right-2 text-yellow-400"
+                    onClick={() => setShowInfo(!showInfo)}
+                >
+                    <FaInfoCircle size={24} />
+                </motion.button>
+                {showInfo && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="mt-4 p-4 bg-blue-900 bg-opacity-50 rounded-lg text-blue-100"
+                    >
+                        <h3 className="text-xl font-bold mb-2">How it works:</h3>
+                        <p>Numerology assigns numbers to letters in names. We calculate a number for each name, compare them, and determine compatibility based on their resonance.</p>
+                    </motion.div>
+                )}
+        
             </motion.div>
         </div>
     );

@@ -1,4 +1,3 @@
-// components/SoulmateCalculator.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBirthdayCake, FaStar, FaStarAndCrescent, FaMoon } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
+import { FaBirthdayCake, FaStar, FaStarAndCrescent, FaMoon, FaInfoCircle } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -25,6 +26,7 @@ const DateInput: React.FC<InputProps> = ({ label, value, onChange }) => (
       className="w-full p-3 bg-teal-900 bg-opacity-30 border border-teal-300 border-opacity-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 backdrop-blur-sm text-teal-100 placeholder-teal-200 placeholder-opacity-70"
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      placeholder="YYYY-MM-DD"
     />
   </div>
 );
@@ -48,7 +50,7 @@ const Result: React.FC<{ content: string }> = ({ content }) => (
     transition={{ duration: 0.5 }}
     className="mt-6 p-4 bg-teal-900 bg-opacity-30 rounded-lg border border-teal-300 border-opacity-50 backdrop-blur-sm"
   >
-    <p className="text-teal-100">{content}</p>
+    <ReactMarkdown className="text-teal-100">{content}</ReactMarkdown>
   </motion.div>
 );
 
@@ -99,13 +101,15 @@ const BirthdateCompatibility: React.FC = () => {
     const [date2, setDate2] = useState('');
     const [result, setResult] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const calculateCompatibility = async () => {
         if (!date1 || !date2) {
-            alert('Please select both birthdates');
+            setError('Please select both birthdates');
             return;
         }
         setIsLoading(true);
+        setError('');
         logEvent(analytics, 'calculate_compatibility_click', { date1, date2 });
         try {
             const response = await openai.chat.completions.create({
@@ -113,11 +117,11 @@ const BirthdateCompatibility: React.FC = () => {
                 messages: [
                     {
                         role: "system",
-                        content: "You are a love compatibility expert. Provide a brief, fun compatibility analysis based on two birthdates."
+                        content: "You are a love compatibility expert. Provide a brief, fun compatibility analysis based on two birthdates. Include astrological signs and a compatibility percentage."
                     },
                     {
                         role: "user",
-                        content: `Analyze the love compatibility for people born on ${date1} and ${date2}.`
+                        content: `Analyze the love compatibility for people born on ${date1} and ${date2}. Include their astrological signs and a compatibility percentage.`
                     }
                 ],
             });
@@ -126,7 +130,7 @@ const BirthdateCompatibility: React.FC = () => {
             logEvent(analytics, 'compatibility_result', { date1, date2, result: response.choices[0].message.content });
         } catch (error) {
             console.error('Error:', error);
-            setResult('An error occurred. Please try again.');
+            setError('An error occurred. Please try again.');
         }
         setIsLoading(false);
     };
@@ -150,13 +154,26 @@ const BirthdateCompatibility: React.FC = () => {
                   transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                   className="highlight text-3xl font-bold mb-6 text-center text-teal-100"
               >
-                  <FaStarAndCrescent className="mr-2" /> Cosmic Love Compatibility
+                  <FaStarAndCrescent className="mr-2 inline-block" /> Cosmic Love Compatibility
               </motion.h1>
-              <DateInput label="First Birthdate" value={date1} onChange={setDate1} />
-              <DateInput label="Second Birthdate" value={date2} onChange={setDate2} />
+              <p className="text-teal-600 bg-teal-100 p-2 rounded mb-4 text-center">
+                <FaInfoCircle className="inline-block mr-2" />
+                Enter birthdates to discover your cosmic connection!
+              </p>
+              <DateInput label="Your Birthdate" value={date1} onChange={setDate1} />
+              <DateInput label="Their Birthdate" value={date2} onChange={setDate2} />
               <Button onClick={calculateCompatibility}>
                   {isLoading ? "Consulting the Stars..." : "Calculate Cosmic Compatibility"}
               </Button>
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-300 mt-4 text-center"
+                >
+                  {error}
+                </motion.p>
+              )}
               <AnimatePresence>
                   {result && <Result content={result} />}
               </AnimatePresence>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
-import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -126,27 +126,53 @@ const LoveQuizGlassmorphism: React.FC = () => {
     const [isWaitingForAPI, setIsWaitingForAPI] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+    const [compatibilityMeter, setCompatibilityMeter] = useState(50);
 
-    const questions = [
+    const allQuestions = [
         "How often do you and your partner express appreciation for each other?",
         "How frequently do you surprise your partner with thoughtful gifts?",
         "How important is physical affection in your relationship?",
         "How often do you prioritize spending quality time together without distractions?",
-        "How frequently do you perform acts of service for your partner?"
+        "How frequently do you perform acts of service for your partner?",
+        "How well do you communicate during disagreements?",
+        "How often do you plan date nights or special activities together?",
+        "How comfortable are you sharing your deepest fears and insecurities with your partner?",
+        "How well do you support each other's personal goals and ambitions?",
+        "How often do you laugh together and share moments of joy?",
+        "How well do you handle financial decisions as a couple?",
+        "How often do you express gratitude for the little things your partner does?",
+        "How well do you respect each other's personal space and independence?",
+        "How often do you engage in shared hobbies or interests?",
+        "How well do you handle stress and difficult times as a couple?"
     ];
+
+    useEffect(() => {
+        if (step === 1) {
+            const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+            setSelectedQuestions(shuffled.slice(0, 10));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [step]);
 
     const handleAnswer = (answer: number) => {
         const newAnswers = [...answers, answer];
         setAnswers(newAnswers);
-        logEvent(analytics, 'quiz_answer', { question: questions[step], answer });
-        if (newAnswers.length < questions.length) {
-            setStep(step + 1);
+        logEvent(analytics, 'quiz_answer', { question: selectedQuestions[currentQuestionIndex], answer });
+        
+        // Update compatibility meter
+        const newCompatibility = Math.min(100, Math.max(0, compatibilityMeter + (answer - 3) * 5));
+        setCompatibilityMeter(newCompatibility);
+
+        if (currentQuestionIndex < selectedQuestions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
             const totalScore = newAnswers.reduce((sum, curr) => sum + curr, 0);
-            const percentageScore = (totalScore / (questions.length * 5)) * 100;
+            const percentageScore = (totalScore / (selectedQuestions.length * 5)) * 100;
             setScore(Math.round(percentageScore));
             setIsWaitingForAPI(true);
-            setStep(step + 1); // Move to the result step immediately
+            setStep(step + 1);
             analyzeLoveCompatibility(percentageScore);
         }
     };
@@ -162,7 +188,14 @@ const LoveQuizGlassmorphism: React.FC = () => {
                     },
                     {
                         role: "user",
-                        content: `Analyze the love compatibility between ${person1} (love language: ${loveLanguage1}) and ${person2} (love language: ${loveLanguage2}). Their quiz score is ${percentageScore.toFixed(2)}%. Provide insights on their compatibility, how their love languages interact, and tips for strengthening their relationship. Keep the response concise, engaging, and positive.`
+                        content: `Analyze the love compatibility between ${person1} (love language: ${loveLanguage1}) and ${person2} (love language: ${loveLanguage2}). Their quiz score is ${percentageScore.toFixed(2)}%. Provide a detailed analysis including:
+                        1. Overall compatibility assessment
+                        2. Strengths of their relationship
+                        3. Areas for improvement
+                        4. How their love languages interact and complement each other
+                        5. Personalized tips for strengthening their relationship
+                        6. A fun "couple nickname" based on their characteristics
+                        Keep the response engaging, positive, and actionable. Limit the response to about 250 words.`
                     }
                 ],
             });
@@ -224,6 +257,8 @@ const LoveQuizGlassmorphism: React.FC = () => {
         setScore(0);
         setShowResult(false);
         setStep(0);
+        setCurrentQuestionIndex(0);
+        setCompatibilityMeter(50);
         logEvent(analytics, 'quiz_restart', { person1, person2 });
     };
 
@@ -268,14 +303,15 @@ const LoveQuizGlassmorphism: React.FC = () => {
                             <GlassButton onClick={() => setStep(1)}>Start Quiz</GlassButton>
                         </motion.div>
                     )}
-                    {step > 0 && step <= questions.length && (
+                    {step === 1 && (
                         <motion.div
-                            key={`step${step}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
+                            key={`question${currentQuestionIndex}`}
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                            transition={{ duration: 0.3 }}
                         >
-                            <h3 className="text-xl font-semibold mb-4 text-white">{questions[step - 1]}</h3>
+                            <h3 className="text-xl font-semibold mb-4 text-white">{selectedQuestions[currentQuestionIndex]}</h3>
                             <div className="flex flex-col space-y-2">
                                 {[1, 2, 3, 4, 5].map((value) => (
                                     <GlassButton key={value} onClick={() => handleAnswer(value)}>
@@ -283,9 +319,29 @@ const LoveQuizGlassmorphism: React.FC = () => {
                                     </GlassButton>
                                 ))}
                             </div>
+                            <motion.div 
+                                className="mt-4 h-2 bg-white bg-opacity-30 rounded-full overflow-hidden"
+                                initial={{ width: 0 }}
+                                animate={{ width: '100%' }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <motion.div 
+                                    className="h-full bg-pink-500"
+                                    initial={{ width: '0%' }}
+                                    animate={{ width: `${(currentQuestionIndex + 1) / selectedQuestions.length * 100}%` }}
+                                    transition={{ duration: 0.3 }}
+                                />
+                            </motion.div>
+                            <div className="mt-4 flex items-center justify-between text-white">
+                                <span>Question {currentQuestionIndex + 1} of {selectedQuestions.length}</span>
+                                <div className="flex items-center">
+                                    <FaHeart className="text-pink-500 mr-2" />
+                                    <span>{compatibilityMeter}%</span>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
-                    {step > questions.length && (
+                    {step === 2 && (
                         <motion.div
                             key="result"
                             initial={{ opacity: 0 }}
@@ -302,7 +358,11 @@ const LoveQuizGlassmorphism: React.FC = () => {
                                     />
                                 </div>
                             ) : showResult && (
-                                <>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3, duration: 0.5 }}
+                                >
                                     <p className="text-white mb-4 whitespace-pre-wrap">{result}</p>
                                     <div className="flex justify-center space-x-4 mt-6">
                                         <motion.button
@@ -333,7 +393,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
                                     <div className="mt-6">
                                         <GlassButton onClick={restartQuiz}>Restart Quiz</GlassButton>
                                     </div>
-                                </>
+                                </motion.div>
                             )}
                         </motion.div>
                     )}
