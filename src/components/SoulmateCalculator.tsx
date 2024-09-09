@@ -67,7 +67,7 @@ const SoulmateCalculator: React.FC = () => {
     return (
         <div ref={containerRef} className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-400 via-violet-400 to-red-400 p-4 relative overflow-hidden">
             <motion.div 
-                className="max-w-md w-full bg-pink-900 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-rose-200 relative z-10"
+                className="soul-cal max-w-md w-full overflow-y-auto max-h-[550px] bg-pink-900 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-rose-200 relative z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

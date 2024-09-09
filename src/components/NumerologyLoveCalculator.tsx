@@ -97,13 +97,13 @@ const NumerologyLoveCalculator: React.FC = () => {
     };
 
     return (
-        <div ref={containerRef} className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-yellow-800 to-blue-700 p-4 relative overflow-hidden">
+        <div ref={containerRef} className="min-h-screen overflow-y-auto flex items-center justify-center bg-gradient-to-br from-blue-900 via-yellow-800 to-blue-700 p-4 relative overflow-hidden">
             <NumerologyParticles containerRef={containerRef} />
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="relative max-w-md w-full bg-blue-800 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-blue-300 border-opacity-30 z-10"
+                className="num-cal relative max-w-md w-full overflow-y-auto max-h-[550px] bg-blue-800 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-blue-300 border-opacity-30 z-10"
             >
                 <motion.h1 
                     className="highlight text-3xl font-bold mb-6 text-center text-yellow-400"

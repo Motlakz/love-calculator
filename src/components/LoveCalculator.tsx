@@ -281,7 +281,7 @@ const LoveCalculator: React.FC = () => {
                 ))}
             </div>
             <motion.div 
-                className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-white border-opacity-30 relative z-10"
+                className="love-cal max-w-md w-full overflow-y-auto max-h-[550px] bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-white border-opacity-30 relative z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

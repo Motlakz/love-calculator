@@ -151,7 +151,7 @@ const ZodiacLoveCalculator: React.FC = () => {
         <div ref={containerRef} className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 p-4 relative overflow-hidden">
             <FloatingSymbols containerRef={containerRef} />
             <motion.div 
-                className="max-w-md w-full bg-indigo-800 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-indigo-300 border-opacity-30 relative z-10"
+                className="zodiac-cal max-w-md w-full overflow-y-auto max-h-[550px] bg-indigo-800 bg-opacity-30 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-indigo-300 border-opacity-30 relative z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

@@ -146,7 +146,7 @@ const BirthdateCompatibility: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-md w-full bg-teal-600 bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-teal-300 border-opacity-30 relative z-10"
+              className="birth-cal max-w-md w-full bg-teal-600 overflow-y-auto max-h-[550px] bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-teal-300 border-opacity-30 relative z-10"
           >
               <motion.h1 
                   initial={{ y: -20 }}

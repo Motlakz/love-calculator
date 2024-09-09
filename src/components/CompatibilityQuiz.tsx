@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import OpenAI from 'openai';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
@@ -265,7 +266,7 @@ const LoveQuizGlassmorphism: React.FC = () => {
     return (
         <div ref={containerRef} className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 p-4 overflow-hidden">
             <motion.div 
-                className="max-w-md w-full z-10 bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-white border-opacity-20"
+                className="quiz-cal max-w-md w-full overflow-y-auto max-h-[550px] z-10 bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-lg p-8 border border-white border-opacity-20"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -363,7 +364,9 @@ const LoveQuizGlassmorphism: React.FC = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3, duration: 0.5 }}
                                 >
-                                    <p className="text-white mb-4 whitespace-pre-wrap">{result}</p>
+                                    <div className="text-white whitespace-pre-wrap">
+                                        <ReactMarkdown>{result}</ReactMarkdown>
+                                    </div>
                                     <div className="flex justify-center space-x-4 mt-6">
                                         <motion.button
                                             whileHover={{ scale: 1.1 }}
