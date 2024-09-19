@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown, FaHourglass } from 'react-icons/fa';
+import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown, FaHourglass, FaArrowRight } from 'react-icons/fa';
 import axios from 'axios';
 import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { logEvent, analytics } from '../firebase';
@@ -32,7 +32,7 @@ const NameInput: React.FC<InputProps> = ({ placeholder, value, onChange, icon })
 const Button: React.FC<{ onClick: () => void; children: React.ReactNode; disabled?: boolean }> = ({ onClick, children, disabled }) => (
     <motion.button
         onClick={onClick}
-        className="w-full bg-red-500 bg-opacity-70 text-white p-3 rounded-lg font-bold hover:bg-opacity-80 transition duration-300 backdrop-blur-sm flex items-center justify-center"
+        className={`w-full bg-red-500 bg-opacity-70 text-white p-3 rounded-lg font-bold hover:bg-opacity-80 transition duration-300 backdrop-blur-sm flex items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         disabled={disabled}
@@ -59,7 +59,7 @@ const Result: React.FC<{ percentage: number; advice: string; quote: string }> = 
                 initial={{ width: 0 }}
                 animate={{ width: `${percentage}%` }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-            ></motion.div>
+            />
         </div>
         <p className="text-white text-center mb-4">
             <FaInfoCircle className="inline mr-2" />
@@ -212,7 +212,6 @@ const LoveCalculator: React.FC = () => {
         const commonLetters = [...set1].filter(letter => set2.has(letter)).length;
         const lengthFactor = Math.abs(name1.length - name2.length);
         
-        // Enhanced scoring algorithm
         const nameScore = (commonLetters * 10) - lengthFactor;
         const relationshipScore = getRelationshipScore(relationshipStatus);
         const timeTogetherScore = calculateTimeTogetherScore(timeTogether);
@@ -305,6 +304,15 @@ const LoveCalculator: React.FC = () => {
                 <Button onClick={calculateLove} disabled={isCalculating}>
                     {isCalculating ? 'Calculating...' : 'Calculate Love'}
                 </Button>
+                {isCalculating && (
+                    <div className="flex justify-center items-center mt-4">
+                        <motion.div
+                            className="w-16 h-16 border-4 border-t-pink-500 border-r-purple-400 border-b-rose-500 border-l-indigo-500 border-solid rounded-full"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                        />
+                    </div>
+                )}
                 <AnimatePresence>
                     {result > 0 && (
                         <motion.div
@@ -314,9 +322,10 @@ const LoveCalculator: React.FC = () => {
                         >
                             <Result percentage={result} advice={advice} quote={quote} />
                             <motion.button
-                                className="mt-4 text-white underline"
+                                className="mt-4 text-white underline flex items-center"
                                 onClick={() => setShowExplanation(!showExplanation)}
                             >
+                                <FaArrowRight className={`mr-2 transform ${showExplanation ? 'rotate-90' : ''}`} />
                                 {showExplanation ? 'Hide' : 'Show'} Explanation
                             </motion.button>
                             <AnimatePresence>

@@ -33,3 +33,135 @@ body {
     border-radius: 30px;
   }
 }
+
+.navbar-scrolled {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Masonry CSS */
+.my-masonry-grid {
+  display: flex;
+  margin-left: -1.5rem; /* Adjust gutter size */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 1.5rem; /* Adjust gutter size */
+  background-clip: padding-box;
+}
+
+/* Style individual items */
+.my-masonry-grid_column > div {
+  margin-bottom: 1.5rem;
+}
+
+.line-clamp-18 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 18;
+}
+
+/* Common styles for all loader items */
+.loader-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: fadeInOut 12s infinite;
+}
+
+/* Specific styles and animation delays */
+
+/* Heart */
+.loader-item.heart {
+  font-size: 140px;
+  color: #e74c3c;
+  animation-delay: 0s;
+}
+
+/* Calculator */
+.loader-item.calculator {
+  font-size: 140px;
+  color: #2ecc71;
+  animation-delay: 4s;
+}
+
+/* Rotating Squares */
+.loader-item.squares {
+  color: #f1c40f;
+  font-size: 120px;
+  display: flex;
+  gap: 5px;
+  animation-delay: 6s;
+}
+
+.loader-item.squares .square1 {
+  animation: rotate1 4s linear infinite;
+}
+
+.loader-item.squares .square2 {
+  animation: rotate2 4s linear infinite;
+}
+
+/* Bubbles */
+.loader-item.bubbles {
+  width: 100%;
+  height: 100%;
+  animation-delay: 10s;
+}
+
+.loader-item.bubbles .bubble {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(135, 206, 250, 0.6);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  animation: floatUp 4s infinite;
+}
+
+.loader-item.bubbles .bubble:nth-child(1) {
+  left: 20%;
+  animation-delay: 0.5s;
+}
+
+.loader-item.bubbles .bubble:nth-child(2) {
+  left: 50%;
+  animation-delay: 0.8s;
+}
+
+.loader-item.bubbles .bubble:nth-child(3) {
+  left: 80%;
+  animation-delay: 1.3s;
+}
+
+/* Keyframes */
+
+/* Fade In and Out Animation */
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  20% { opacity: 1; }
+  25% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Rotate clockwise */
+@keyframes rotate1 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Rotate counter-clockwise */
+@keyframes rotate2 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* Float Up Animation for Bubbles */
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 0.6; }
+  to { transform: translateY(-50px); opacity: 0; }
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { analytics, logEvent } from './firebase';
 import LoveCalculator from './components/LoveCalculator';
 import BirthdateCompatibility from './components/BirthdateCompatibility';
@@ -9,6 +9,10 @@ import NumerologyLoveCalculator from './components/NumerologyLoveCalculator';
 import LoveQuizGlassmorphism from './components/CompatibilityQuiz';
 import StarryNightSky from './components/StarryNightSky';
 import CookiesModal from './components/CookiesModal';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import CalculatorBlog from './pages/CalculatorBlog';
 
 const App: React.FC = () => {
   const [isTrackingEnabled, setIsTrackingEnabled] = useState(false);
@@ -39,41 +43,26 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-tr from-blue-950 via-purple-950 to-black">
-      <StarryNightSky />
-      <div className="container mx-auto relative z-10">
-        <motion.h1 
-          className="highlight text-4xl font-bold text-center mt-8 text-gray-200"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Love Test AI
-        </motion.h1>
-        <p className="text-semibold text-xl text-center highlight mb-6 py-8 text-gray-300">Welcome to Love Test AI. The best, most interactive, and intuitive assortment of love calculators for your enjoyment!</p>
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <div onClick={() => handleComponentClick('LoveCalculator')}>
-            <LoveCalculator />
-          </div>
-          <div onClick={() => handleComponentClick('BirthdateCompatibility')}>
-            <BirthdateCompatibility />
-          </div>
-          <div onClick={() => handleComponentClick('ZodiacLoveCalculator')}>
-            <ZodiacLoveCalculator />
-          </div>
-          <div onClick={() => handleComponentClick('SoulmateCalculator')}>
-            <SoulmateCalculator />
-          </div>
-          <div onClick={() => handleComponentClick('NumerologyLoveCalculator')}>
-            <NumerologyLoveCalculator />
-          </div>
-          <div onClick={() => handleComponentClick('LoveQuizGlassmorphism')}>
-            <LoveQuizGlassmorphism />
-          </div>
+    <Router>
+      <div className="relative min-h-screen overflow-hidden bg-gradient-to-tr from-blue-950 via-purple-950 to-black">
+        <Navbar />
+        <StarryNightSky />
+        <div className="container mx-auto relative z-10">
+          <Routes>
+            <Route path="/" element={<Home handleComponentClick={handleComponentClick} />} />
+            <Route path="/love-calculator" element={<LoveCalculator />} />
+            <Route path="/zodiac-love-calculator" element={<ZodiacLoveCalculator />} />
+            <Route path="/birthdate-compatibility" element={<BirthdateCompatibility />} />
+            <Route path="/soulmate-calculator" element={<SoulmateCalculator />} />
+            <Route path="/love-quiz" element={<LoveQuizGlassmorphism />} />
+            <Route path="/numerology-love-calculator" element={<NumerologyLoveCalculator />} />
+            <Route path="/:calculatorType/blog" element={<CalculatorBlog />} />
+          </Routes>
         </div>
+        <Footer />
       </div>
       <CookiesModal onAccept={handleAcceptCookies} onDecline={handleDeclineCookies} />
-    </div>
+    </Router>
   );
 };
 

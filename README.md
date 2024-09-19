@@ -53,4 +53,13 @@ Welcome to the Love Calculator App, a comprehensive and fun application that exp
 - Tailwind CSS 🎨
 - OpenAI API 🧠
 
+## Resources
+
+- [LoveCalculator](https://www.flaticon.com/free-icons/budget)
+- [Zodiac](https://www.flaticon.com/free-icons/astrology)
+- [BirthdateCompatibility](https://www.flaticon.com/free-icons/wedding-planner)
+- [NumerologyLoveCalculator](https://www.flaticon.com/free-icons/fortune-teller)
+- [SoulmateCalculator](https://www.flaticon.com/free-icons/soulmates)
+- [LoveQuiz](https://www.flaticon.com/free-icons/quiz)
+
 Thank you for using the Love Calculator App! We hope it brings you joy, laughter, and insights into the wonderful world of love. If you have any questions or feedback, please don't hesitate to reach out. Happy calculating! 💕✨

@@ -4,6 +4,7 @@ import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInfinity } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
+import ReactMarkdown from 'react-markdown';
 
 const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
@@ -20,43 +21,45 @@ const InputField: React.FC<{ type: string; placeholder?: string; value: string; 
 );
 
 const Button: React.FC<{ onClick: () => void; children: React.ReactNode }> = ({ onClick, children }) => (
-  <motion.button
-    onClick={onClick}
-    className="w-full bg-rose-400 flex items-center justify-center text-white p-3 rounded-lg font-bold hover:bg-rose-500 transition duration-300"
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <FaInfinity className='mr-2' /> {children}
-  </motion.button>
+    <motion.button
+        onClick={onClick}
+        className="w-full bg-rose-400 flex items-center justify-center text-white p-3 rounded-lg font-bold hover:bg-rose-500 transition duration-300"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+    >
+        <FaInfinity className='mr-2' /> {children}
+    </motion.button>
 );
 
-const SoulmateCalculator: React.FC = () => {
+const SoulmateCalculator = () => {
     const [name, setName] = useState('');
     const [birthdate, setBirthdate] = useState('');
+    const [zodiacSign, setZodiacSign] = useState('');
+    const [interests, setInterests] = useState('');
     const [result, setResult] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const calculateSoulmate = async () => {
         setIsLoading(true);
-        logEvent(analytics, 'calculate_soulmate_click', { name, birthdate });
+        logEvent(analytics, 'calculate_soulmate_click', { name, birthdate, zodiacSign, interests });
         try {
             const response = await openai.chat.completions.create({
                 model: "gpt-4o-mini",
                 messages: [
                     {
                         role: "system",
-                        content: "You are a mystical soulmate predictor. Provide a brief, engaging description of someone's soulmate based on their name and birthdate."
+                        content: "You are a mystical soulmate predictor. Provide a comprehensive description of someone's soulmate based on their name, birthdate, zodiac sign, and interests."
                     },
                     {
                         role: "user",
-                        content: `Describe the soulmate for a person named ${name} born on ${birthdate}.`
+                        content: `Describe the soulmate for a person named ${name}, born on ${birthdate}, with the zodiac sign ${zodiacSign} and interests in ${interests}.`
                     }
                 ],
             });
 
             setResult(response.choices[0].message.content || '');
-            logEvent(analytics, 'soulmate_result', { name, birthdate, result: response.choices[0].message.content });
+            logEvent(analytics, 'soulmate_result', { name, birthdate, zodiacSign, interests, result: response.choices[0].message.content });
         } catch (error) {
             console.error('Error:', error);
             setResult('An error occurred. Please try again.');
@@ -73,15 +76,17 @@ const SoulmateCalculator: React.FC = () => {
                 transition={{ duration: 0.5 }}
             >
                 <motion.h1 
-                    className="highlight text-3xl font-bold mb-6 text-center text-rose-200"
+                    className="highlight text-3xl font-bold mb-6 flex items-center justify-center text-rose-200"
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                   <FaInfinity /> Soulmate Finder
+                   <FaInfinity className="mr-2" /> Soulmate Finder
                 </motion.h1>
                 <InputField type="text" placeholder="Enter your name" value={name} onChange={setName} />
-                <InputField type="date" value={birthdate} onChange={setBirthdate} />
+                <InputField type="date" placeholder={"YYYY/MM/DD"} value={birthdate} onChange={setBirthdate} />
+                <InputField type="text" placeholder="Enter your zodiac sign" value={zodiacSign} onChange={setZodiacSign} />
+                <InputField type="text" placeholder="Enter your interests (comma separated)" value={interests} onChange={setInterests} />
                 <Button onClick={calculateSoulmate}>
                     {isLoading ? "Finding your soulmate..." : "Reveal My Soulmate"}
                 </Button>
@@ -94,7 +99,7 @@ const SoulmateCalculator: React.FC = () => {
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <p className="text-rose-800">{result}</p>
+                            <ReactMarkdown className="text-rose-800">{result}</ReactMarkdown>
                         </motion.div>
                     )}
                 </AnimatePresence>

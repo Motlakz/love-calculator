@@ -157,7 +157,7 @@ const ZodiacLoveCalculator: React.FC = () => {
                 transition={{ duration: 0.5 }}
             >
                 <motion.h1 
-                    className="highlight text-3xl font-bold mb-6 text-center text-indigo-100"
+                    className="highlight text-3xl font-bold mb-6 flex items-center justify-center text-indigo-100"
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
