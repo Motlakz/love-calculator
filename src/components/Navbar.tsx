@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from "./../assets/heartbeat.gif";
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -16,13 +16,40 @@ const Navbar = () => {
         { name: 'Numerology Love Calculator', id: 'numerology-love-calculator' }
     ];
 
-    const scrollToCalculator = (id: string) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+    const scrollToElement = useCallback((element: HTMLElement, duration: number) => {
+        const start = window.pageYOffset;
+        const target = element.getBoundingClientRect().top + start;
+        const navbarHeight = document.getElementById('navbar')?.offsetHeight || 0;
+        const targetPosition = target - navbarHeight;
+        let startTime: number | null = null;
+
+        function animation(currentTime: number) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = ease(timeElapsed, start, targetPosition - start, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
         }
+
+        function ease(t: number, b: number, c: number, d: number) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+
+        requestAnimationFrame(animation);
+    }, []);
+
+    const scrollToCalculator = useCallback((id: string) => {
         setIsMenuOpen(false);
-    };
+        setTimeout(() => {
+            const element = document.getElementById(id);
+            if (element) {
+                scrollToElement(element, 1000);
+            }
+        }, 100);
+    }, [scrollToElement]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -91,7 +118,7 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden rounded-b-xl bg-gradient-to-r from-pink-400/90 to-indigo-400/90 backdrop-filter backdrop-blur-lg"
+                            className="md:hidden rounded-xl bg-gradient-to-r from-pink-400/90 to-indigo-400/90 backdrop-filter backdrop-blur-lg"
                         >
                             {calculators.map((calc) => (
                                 <motion.button
@@ -105,7 +132,7 @@ const Navbar = () => {
                                 </motion.button>
                             ))}
                         </motion.div>
-                    </div> 
+                    </div>
                 )}
             </AnimatePresence>
         </motion.nav>

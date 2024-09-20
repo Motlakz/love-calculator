@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { analytics, logEvent } from './firebase';
-import LoveCalculator from './components/LoveCalculator';
-import BirthdateCompatibility from './components/BirthdateCompatibility';
-import ZodiacLoveCalculator from './components/ZodiacLoveCalculator';
-import SoulmateCalculator from './components/SoulmateCalculator';
-import NumerologyLoveCalculator from './components/NumerologyLoveCalculator';
-import LoveQuizGlassmorphism from './components/CompatibilityQuiz';
 import StarryNightSky from './components/StarryNightSky';
 import CookiesModal from './components/CookiesModal';
 import Navbar from './components/Navbar';
@@ -50,13 +44,7 @@ const App: React.FC = () => {
         <div className="container mx-auto relative z-10">
           <Routes>
             <Route path="/" element={<Home handleComponentClick={handleComponentClick} />} />
-            <Route path="/love-calculator" element={<LoveCalculator />} />
-            <Route path="/zodiac-love-calculator" element={<ZodiacLoveCalculator />} />
-            <Route path="/birthdate-compatibility" element={<BirthdateCompatibility />} />
-            <Route path="/soulmate-calculator" element={<SoulmateCalculator />} />
-            <Route path="/love-quiz" element={<LoveQuizGlassmorphism />} />
-            <Route path="/numerology-love-calculator" element={<NumerologyLoveCalculator />} />
-            <Route path="/:calculatorType/blog" element={<CalculatorBlog />} />
+            <Route path="/:calculatorType/" element={<CalculatorBlog />} />
           </Routes>
         </div>
         <Footer />

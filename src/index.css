@@ -55,11 +55,11 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.line-clamp-18 {
+.line-clamp-12 {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 18;
+  -webkit-line-clamp: 12;
 }
 
 /* Common styles for all loader items */
@@ -90,7 +90,7 @@ body {
 
 /* Rotating Squares */
 .loader-item.squares {
-  color: #f1c40f;
+  color: deeppink;
   font-size: 120px;
   display: flex;
   gap: 5px;
@@ -113,8 +113,8 @@ body {
 }
 
 .loader-item.bubbles .bubble {
-  width: 8px;
-  height: 8px;
+  width: 24px;
+  height: 24px;
   background-color: rgba(135, 206, 250, 0.6);
   border-radius: 50%;
   position: absolute;

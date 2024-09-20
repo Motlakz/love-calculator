@@ -10,12 +10,12 @@ import Numerology from "./../assets/numerology.png"
 import LoveQuiz from "./../assets/heart.png"
 
 const calculators = [
-    { name: 'Love Calculator', path: '/love/blog', imgUrl: LoveCalc },
-    { name: 'Zodiac Love Calculator', path: '/zodiac/blog', imgUrl: Zodiac },
-    { name: 'Birthdate Compatibility', path: '/birthdate/blog', imgUrl: Birthday },
-    { name: 'Soulmate Calculator', path: '/soulmate/blog', imgUrl: Soulmate },
-    { name: 'Love Quiz', path: '/quiz/blog', imgUrl: LoveQuiz },
-    { name: 'Numerology Love Calculator', path: '/numerology/blog', imgUrl: Numerology },
+    { name: 'Love Calculator', path: '/love-calculator', imgUrl: LoveCalc },
+    { name: 'Zodiac Love Calculator', path: '/zodiac-love-calculator', imgUrl: Zodiac },
+    { name: 'Birthdate Compatibility', path: '/birthdate-compatibility-calculator', imgUrl: Birthday },
+    { name: 'Soulmate Calculator', path: '/soulmate-calculator', imgUrl: Soulmate },
+    { name: 'Love Quiz', path: '/love-quiz', imgUrl: LoveQuiz },
+    { name: 'Numerology Love Calculator', path: '/numerology-love-calculator', imgUrl: Numerology },
 ];
 
 const Footer: React.FC = () => {
@@ -47,9 +47,9 @@ const Footer: React.FC = () => {
                     <div className="space-y-4">
                         <h3 className="text-lg font-semibold text-pink-400">Connect With Us</h3>
                         <div className="flex space-x-4">
-                            <Linkedin className="text-blue-400 hover:text-blue-300 cursor-pointer" />
-                            <Github className="text-purple-400 hover:text-purple-300 cursor-pointer" />
-                            <Twitter className="text-blue-400 hover:text-blue-300 cursor-pointer" />
+                            <Link to="https://www.linkedin.com/in/motlalepula-sello-37956813a/"><Linkedin className="text-blue-400 hover:text-blue-300 cursor-pointer" /></Link>
+                            <Link to="https://www.github.com/in/Motlakz/"><Github className="text-purple-400 hover:text-purple-300 cursor-pointer" /></Link>
+                            <Link to="https://www.twitter.com/MotlalepulaSel6/"><Twitter className="text-blue-400 hover:text-blue-300 cursor-pointer" /></Link>
                         </div>
                     </div>
                 </div>

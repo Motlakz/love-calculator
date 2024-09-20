@@ -1,3 +1,4 @@
+import { X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; content: string }> = ({
@@ -10,19 +11,19 @@ const Modal: React.FC<{ isOpen: boolean; onClose: () => void; title: string; con
   
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={onClose} // Close modal when clicking outside the content
       >
         <div
-          className="bg-white rounded-lg w-full max-w-3xl mx-4 relative"
+          className="bg-gradient-to-br from-pink-200 via-rose-200 to-indigo-200 rounded-lg w-full max-w-3xl mx-4 relative"
           onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the content
         >
           <button
-            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 bg-pink-400 rounded-full"
             onClick={onClose}
             aria-label="Close Modal"
           >
-            &#10005;
+            <X />
           </button>
           <div className="p-6 overflow-y-auto max-h-[80vh]">
             <h2 className="text-3xl font-bold mb-4">{title}</h2>
