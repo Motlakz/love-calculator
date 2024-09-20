@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import CalculatorBlog from './pages/CalculatorBlog';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const App: React.FC = () => {
   const [isTrackingEnabled, setIsTrackingEnabled] = useState(false);
@@ -45,6 +46,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home handleComponentClick={handleComponentClick} />} />
             <Route path="/:calculatorType/" element={<CalculatorBlog />} />
+            <Route path="/privacy-policy/" element={<PrivacyPolicy />} />
           </Routes>
         </div>
         <Footer />
