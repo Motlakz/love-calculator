@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { FaHeart, FaInfoCircle, FaQuoteLeft, FaQuoteRight, FaChevronDown, FaHourglass, FaArrowRight } from 'react-icons/fa';
-import axios from 'axios';
-import { logEvent, analytics } from '../firebase';
 import { NameInput } from './NameInput';
+import { calculateLove } from '../utils';
 
 const Button: React.FC<{ onClick: () => void; children: React.ReactNode; disabled?: boolean }> = ({ onClick, children, disabled }) => (
     <motion.button
@@ -170,82 +169,24 @@ const LoveCalculator: React.FC = () => {
         { value: "complicated", label: "It's Complicated" },
     ];
 
-    const calculateLove = async () => {
-        if (name1.trim() === '' || name2.trim() === '' || !relationshipStatus) {
-            alert('Please fill in all fields');
-            return;
-        }
-
+    const handleCalculateLove = async () => {
         setIsCalculating(true);
-        await controls.start({
-            scale: [1, 1.2, 1],
-            rotate: [0, 360, 0],
-            transition: { duration: 2 }
-        });
-
-        const set1 = new Set(name1.toLowerCase());
-        const set2 = new Set(name2.toLowerCase());
-        const commonLetters = [...set1].filter(letter => set2.has(letter)).length;
-        const lengthFactor = Math.abs(name1.length - name2.length);
-        
-        const nameScore = (commonLetters * 10) - lengthFactor;
-        const relationshipScore = getRelationshipScore(relationshipStatus);
-        const timeTogetherScore = calculateTimeTogetherScore(timeTogether);
-        
-        const baseScore = (nameScore + relationshipScore + timeTogetherScore) / 4;
-        const finalScore = Math.max(0, Math.min(100, Math.round(baseScore)));
-        
-        setResult(finalScore);
-        logEvent(analytics, 'calculate_love_click', { name1, name2, relationshipStatus, timeTogether });
-
         try {
-            const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-                model: "gpt-4o-mini",
-                messages: [{
-                    role: "system",
-                    content: "You are a relationship advisor. Provide advice and a love quote based on the given love percentage and relationship status."
-                }, {
-                    role: "user",
-                    content: `Love percentage: ${finalScore}%. Relationship status: ${relationshipStatus}. Provide brief advice and a short love quote.`
-                }],
-                max_tokens: 150
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${import.meta.env.VITE_APP_OPENAI_API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
+            const result = await calculateLove(name1, name2, relationshipStatus, timeTogether);
+            setResult(result.finalScore);
+            setAdvice(result.advice);
+            setQuote(result.quote);
+            
+            await controls.start({
+                scale: [1, 1.2, 1],
+                rotate: [0, 360, 0],
+                transition: { duration: 2 }
             });
-
-            const content = response.data.choices[0].message.content;
-            const [adviceResponse, quoteResponse] = content.split('\n\n');
-            setAdvice(adviceResponse.replace('Advice: ', ''));
-            setQuote(quoteResponse.replace('Quote: ', ''));
-            logEvent(analytics, 'love_result', { name1, name2, relationshipStatus, result: finalScore, advice: adviceResponse, quote: quoteResponse });
         } catch (error) {
-            console.error('Error fetching advice:', error);
-            setAdvice('Love is a journey. Enjoy every step!');
-            setQuote('Where there is love, there is life. - Mahatma Gandhi');
+            alert((error as Error).message);
+        } finally {
+            setIsCalculating(false);
         }
-
-        setIsCalculating(false);
-    };
-
-    const getRelationshipScore = (status: string) => {
-        const scores: {[key: string]: number} = {
-            "crushing": 60,
-            "dating": 70,
-            "committed": 80,
-            "married": 90,
-            "longDistance": 75,
-            "complicated": 50
-        };
-        return scores[status] || 50;
-    };
-
-    const calculateTimeTogetherScore = (time: string) => {
-        const [value, unit] = time.split(' ');
-        const months = unit === 'years' ? parseInt(value) * 12 : parseInt(value);
-        return Math.min(100, months * 2);
     };
 
     return (
@@ -277,7 +218,7 @@ const LoveCalculator: React.FC = () => {
                     options={relationshipOptions}
                 />
                 <NameInput placeholder="Time together (e.g., 2 years)" value={timeTogether} onChange={setTimeTogether} icon={<FaHourglass className='text-white' />} />
-                <Button onClick={calculateLove} disabled={isCalculating}>
+                <Button onClick={handleCalculateLove} disabled={isCalculating}>
                     {isCalculating ? 'Calculating...' : 'Calculate Love'}
                 </Button>
                 {isCalculating && (

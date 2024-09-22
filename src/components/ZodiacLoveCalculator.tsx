@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
-import { logEvent, analytics } from '../firebase';
-import { openai } from '../api/openai';
+import { calculateZodiacCompatibility } from '../utils';
 
 const zodiacSigns = [
     'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
@@ -110,37 +109,15 @@ const ZodiacLoveCalculator: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const calculateZodiacCompatibility = async () => {
-        if (!sign1 || !sign2) {
-            alert('Please select both zodiac signs');
-            return;
-        }
+    const handleZodiacCompatibility = async () => {
         setIsLoading(true);
-        const score = Math.floor(Math.random() * 101);
-        logEvent(analytics, 'calculate_zodiac_compatibility_click', { sign1, sign2 });
-
         try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are an expert astrologer specializing in zodiac compatibility."
-                    },
-                    {
-                        role: "user",
-                        content: `Provide a brief, fun explanation of the love compatibility between ${sign1} and ${sign2}. Their compatibility score is ${score}%.`
-                    }
-                ],
-            });
-
-            const text = response.choices[0].message.content || '';
-            setResult(`Compatibility: ${score}%\n\n${text}`);
-            logEvent(analytics, 'zodiac_compatibility_result', { sign1, sign2, score, result: text });
+            const zodiacCompatibility = await calculateZodiacCompatibility(sign1, sign2);
+            setResult(zodiacCompatibility);
         } catch (error) {
-            console.error('Error:', error);
-            setResult('An error occurred. Please try again.');
+            setResult('Error calculating zodiac compatibility');
         }
+        
         setIsLoading(false);
     };
 
@@ -163,7 +140,7 @@ const ZodiacLoveCalculator: React.FC = () => {
                 </motion.h1>
                 <ZodiacSelect value={sign1} onChange={setSign1} placeholder="Choose your sign" />
                 <ZodiacSelect value={sign2} onChange={setSign2} placeholder="Choose your partner's sign" />
-                <Button onClick={calculateZodiacCompatibility}>
+                <Button onClick={handleZodiacCompatibility}>
                     {isLoading ? (
                         <>
                             <p>Aligning the stars...</p>

@@ -13,6 +13,7 @@ dist-ssr
 *.local
 openai.ts
 generateBlogContent.ts
+loveQuizQuestions.ts
 .env
 
 # Editor directories and files

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { FaBirthdayCake, FaStar, FaStarAndCrescent, FaMoon, FaInfoCircle } from 'react-icons/fa';
-import { logEvent, analytics } from '../firebase';
-import { openai } from '../api/openai';
+import { calculateCompatibility } from '../utils';
 
 interface InputProps {
   label: string;
@@ -100,36 +99,16 @@ const BirthdateCompatibility: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const calculateCompatibility = async () => {
-        if (!date1 || !date2) {
-            setError('Please select both birthdates');
-            return;
-        }
-        setIsLoading(true);
-        setError('');
-        logEvent(analytics, 'calculate_compatibility_click', { date1, date2 });
-        try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are a love compatibility expert. Provide a brief, fun compatibility analysis based on two birthdates. Include astrological signs and a compatibility percentage."
-                    },
-                    {
-                        role: "user",
-                        content: `Analyze the love compatibility for people born on ${date1} and ${date2}. Include their astrological signs and a compatibility percentage.`
-                    }
-                ],
-            });
-
-            setResult(response.choices[0].message.content || '');
-            logEvent(analytics, 'compatibility_result', { date1, date2, result: response.choices[0].message.content });
-        } catch (error) {
-            console.error('Error:', error);
-            setError('An error occurred. Please try again.');
-        }
-        setIsLoading(false);
+    const handleCompatibility = async () => {
+      setIsLoading(true);
+      try {
+        const compatibility = await calculateCompatibility(date1, date2);
+        setResult(compatibility);
+      } catch (error) {
+        setResult('Error calculating compatibility');
+        setError('Failed to calculate compatibility')
+      }
+      setIsLoading(false);
     };
 
     return (
@@ -159,7 +138,7 @@ const BirthdateCompatibility: React.FC = () => {
               </p>
               <DateInput label="Your Birthdate" value={date1} onChange={setDate1} />
               <DateInput label="Their Birthdate" value={date2} onChange={setDate2} />
-              <Button onClick={calculateCompatibility}>
+              <Button onClick={handleCompatibility}>
                   {isLoading ? "Consulting the Stars..." : "Calculate Cosmic Compatibility"}
               </Button>
               {error && (

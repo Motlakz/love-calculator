@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Sparkles, RefreshCcw, Copy, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -14,15 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
-import { openai } from '../api/openai';
 import { NameInput } from './NameInput';
 import { GiHeartBeats } from 'react-icons/gi';
+import { generatePoem } from '../utils';
 
 const LovePoemGenerator = () => {
     const [name1, setName1] = useState('');
     const [name2, setName2] = useState('');
     const [poem, setPoem] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [poemLength, setPoemLength] = useState(4);
     const [rhyming, setRhyming] = useState(true);
     const [theme, setTheme] = useState('romance');
@@ -31,38 +31,16 @@ const LovePoemGenerator = () => {
 
     const themes = ['romance', 'nature', 'cosmic', 'fantasy', 'adventure', 'mystery'];
 
-    const generatePoem = useCallback(async () => {
-        if (!name1 || !name2) return;
-        
-        setLoading(true);
-        setCopied(false);
+    const handlePoemGeneration = async () => {
+        setIsLoading(true);
         try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: `You are a romantic poet. Create a beautiful and heartfelt love poem based on the given names, theme, and specifications.`
-                    },
-                    {
-                        role: "user",
-                        content: `Write a love poem for ${name1} and ${name2}. 
-                        Theme: ${theme}
-                        Number of stanzas: ${poemLength}
-                        Rhyming: ${rhyming ? 'Yes' : 'No'}
-                        Please make sure the poem is personalized, mentioning both names at least once.`
-                    }
-                ],
-            });
-
-            setPoem(response.choices[0].message.content || '');
+          const poem = await generatePoem(name1, name2, theme, poemLength, rhyming);
+          setPoem(poem);
         } catch (error) {
-            console.error('Error generating poem:', error);
-            setPoem('Oops! Something went wrong while generating the poem. Please try again.');
-        } finally {
-            setLoading(false);
+            setPoem('Error generating poem');
         }
-    }, [name1, name2, poemLength, rhyming, theme]);
+        setIsLoading(false);
+    };
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(poem);
@@ -129,11 +107,11 @@ const LovePoemGenerator = () => {
                             </Select>
                         </div>
                         <Button
-                            onClick={generatePoem}
+                            onClick={handlePoemGeneration}
                             className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
-                            disabled={loading || !name1 || !name2}
+                            disabled={isLoading || !name1 || !name2}
                         >
-                            {loading ? (
+                            {isLoading ? (
                                 <RefreshCcw className="animate-spin" />
                             ) : (
                                 'Generate Poem'

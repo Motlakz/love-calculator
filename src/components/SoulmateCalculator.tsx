@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInfinity } from 'react-icons/fa';
-import { logEvent, analytics } from '../firebase';
 import ReactMarkdown from 'react-markdown';
-import { openai } from '../api/openai';
+import { calculateSoulmate } from '../utils';
 
 const InputField: React.FC<{ type: string; placeholder?: string; value: string; onChange: (value: string) => void }> = ({ type, placeholder, value, onChange }) => (
     <motion.input
@@ -37,29 +36,13 @@ const SoulmateCalculator = () => {
     const [isLoading, setIsLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const calculateSoulmate = async () => {
+    const handleSoulmateCalculation = async () => {
         setIsLoading(true);
-        logEvent(analytics, 'calculate_soulmate_click', { name, birthdate, zodiacSign, interests });
         try {
-            const response = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
-                messages: [
-                    {
-                        role: "system",
-                        content: "You are a mystical soulmate predictor. Provide a comprehensive description of someone's soulmate based on their name, birthdate, zodiac sign, and interests."
-                    },
-                    {
-                        role: "user",
-                        content: `Describe the soulmate for a person named ${name}, born on ${birthdate}, with the zodiac sign ${zodiacSign} and interests in ${interests}.`
-                    }
-                ],
-            });
-
-            setResult(response.choices[0].message.content || '');
-            logEvent(analytics, 'soulmate_result', { name, birthdate, zodiacSign, interests, result: response.choices[0].message.content });
+            const soulmate = await calculateSoulmate(name, birthdate, zodiacSign, interests);
+            setResult(soulmate);
         } catch (error) {
-            console.error('Error:', error);
-            setResult('An error occurred. Please try again.');
+            setResult('Error calculating soulmate');
         }
         setIsLoading(false);
     };
@@ -84,7 +67,7 @@ const SoulmateCalculator = () => {
                 <InputField type="date" placeholder={"YYYY/MM/DD"} value={birthdate} onChange={setBirthdate} />
                 <InputField type="text" placeholder="Enter your zodiac sign" value={zodiacSign} onChange={setZodiacSign} />
                 <InputField type="text" placeholder="Enter your interests (comma separated)" value={interests} onChange={setInterests} />
-                <Button onClick={calculateSoulmate}>
+                <Button onClick={handleSoulmateCalculation}>
                     {isLoading ? "Finding your soulmate..." : "Reveal My Soulmate"}
                 </Button>
                 <AnimatePresence>
