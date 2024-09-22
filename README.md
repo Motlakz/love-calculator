@@ -34,18 +34,6 @@ Welcome to the Love Calculator App, a comprehensive and fun application that exp
 - Enter two names and let the AI generate a unique love poem just for them.
 - Powered by the OpenAI API for creative and romantic poetry.
 
-## 📂 Project Structure
-
-- `src/components`: Contains the main components of the Love Calculator App.
-  - `LoveCalculator.tsx`: Love Calculator by Name component.
-  - `BirthdateCompatibility.tsx`: Love Compatibility by Date of Birth component.
-  - `ZodiacLoveCalculator.tsx`: Zodiac Love Calculator component.
-  - `SoulmateCalculator.tsx`: Soulmate Calculator component.
-  - `NumerologyLoveCalculator.tsx`: Numerology Love Calculator component.
-  - `LovePoemGenerator.tsx`: Love Poem Generator component.
-- `src/App.tsx`: Main application component that renders all the calculator components.
-- `src/index.tsx`: Entry point of the application.
-
 ## 🛠️ Technologies Used
 
 - React ⚛️
@@ -61,5 +49,7 @@ Welcome to the Love Calculator App, a comprehensive and fun application that exp
 - [NumerologyLoveCalculator](https://www.flaticon.com/free-icons/fortune-teller)
 - [SoulmateCalculator](https://www.flaticon.com/free-icons/soulmates)
 - [LoveQuiz](https://www.flaticon.com/free-icons/quiz)
+- [LovePoem](https://www.flaticon.com/free-icons/poem)
+- [LoveLetter](https://www.flaticon.com/free-icons/letter)
 
 Thank you for using the Love Calculator App! We hope it brings you joy, laughter, and insights into the wonderful world of love. If you have any questions or feedback, please don't hesitate to reach out. Happy calculating! 💕✨

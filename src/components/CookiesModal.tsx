@@ -93,7 +93,7 @@ const CookiesModal: React.FC<{ onAccept: () => void; onDecline: () => void }> = 
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={handleClose}
-                            className="absolute right-4 top-4 text-2xl rounded-md bg-pink-400 text-slate-600 hover:text-pink-400 hover:bg-gray-600"
+                            className="absolute right-4 top-4 text-2xl rounded-md text-gray-500 hover:text-pink-400"
                         >
                             <FaWindowClose />
                         </motion.button>

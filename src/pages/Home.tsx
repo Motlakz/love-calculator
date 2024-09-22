@@ -6,7 +6,6 @@ import SoulmateCalculator from '../components/SoulmateCalculator';
 import BirthdateCompatibility from '../components/BirthdateCompatibility';
 import ZodiacLoveCalculator from '../components/ZodiacLoveCalculator';
 import LoveCalculator from '../components/LoveCalculator';
-
 interface HomeProps {
     handleComponentClick: (componentName: string) => void;
 }
@@ -44,7 +43,7 @@ const Home: React.FC<HomeProps> = ({ handleComponentClick }) => {
                 <div id="numerology-love-calculator" onClick={() => handleComponentClick('NumerologyLoveCalculator')}>
                     <NumerologyLoveCalculator />
                 </div>
-          </div>
+            </div>
         </>
     );
 };

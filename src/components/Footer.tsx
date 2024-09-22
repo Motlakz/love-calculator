@@ -8,14 +8,16 @@ import Birthday from "./../assets/wedding-cost.png"
 import Soulmate from "./../assets/understanding.png"
 import Numerology from "./../assets/numerology.png"
 import LoveQuiz from "./../assets/heart.png"
+import LovePoem from "./../assets/love-letter.png"
 
 const calculators = [
     { name: 'Love Calculator', path: '/love-calculator', imgUrl: LoveCalc },
     { name: 'Zodiac Love Calculator', path: '/zodiac-love-calculator', imgUrl: Zodiac },
     { name: 'Birthdate Compatibility', path: '/birthdate-compatibility-calculator', imgUrl: Birthday },
     { name: 'Soulmate Calculator', path: '/soulmate-calculator', imgUrl: Soulmate },
-    { name: 'Love Quiz', path: '/love-quiz', imgUrl: LoveQuiz },
+    { name: 'Love Quiz', path: '/compatibility-quiz', imgUrl: LoveQuiz },
     { name: 'Numerology Love Calculator', path: '/numerology-love-calculator', imgUrl: Numerology },
+    { name: 'Love Poem Generator', path: '/love-poem-generator', imgUrl: LovePoem },
 ];
 
 const Footer: React.FC = () => {

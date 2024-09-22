@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
-import OpenAI from 'openai';
-import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
-
-const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+import { openai } from '../api/openai';
 
 const loveLanguages = [
     'Words of Affirmation',

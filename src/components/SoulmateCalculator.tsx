@@ -1,12 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import OpenAI from 'openai';
-import { VITE_APP_OPENAI_API_KEY } from '../api/openai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInfinity } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 import ReactMarkdown from 'react-markdown';
-
-const openai = new OpenAI({ apiKey: VITE_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+import { openai } from '../api/openai';
 
 const InputField: React.FC<{ type: string; placeholder?: string; value: string; onChange: (value: string) => void }> = ({ type, placeholder, value, onChange }) => (
     <motion.input

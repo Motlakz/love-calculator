@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import CalculatorBlog from './pages/CalculatorBlog';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import LovePoemGenerator from './components/LovePoemGenerator';
 
 const App: React.FC = () => {
   const [isTrackingEnabled, setIsTrackingEnabled] = useState(false);
@@ -45,8 +46,9 @@ const App: React.FC = () => {
         <div className="container mx-auto relative z-10">
           <Routes>
             <Route path="/" element={<Home handleComponentClick={handleComponentClick} />} />
-            <Route path="/:calculatorType/" element={<CalculatorBlog />} />
-            <Route path="/privacy-policy/" element={<PrivacyPolicy />} />
+            <Route path="/love-poem-generator" element={<LovePoemGenerator />} />
+            <Route path="/:calculatorType" element={<CalculatorBlog />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           </Routes>
         </div>
         <Footer />
