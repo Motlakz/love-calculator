@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
                         </p>
                     </div>
                     <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-pink-400">Our Calculators</h3>
+                        <h3 className="text-lg font-semibold text-pink-400">Learn More About Our Calculators</h3>
                         <ul className="space-y-2">
                             {calculators.map((calc) => (
                                 <li key={calc.path}>
