@@ -6,6 +6,7 @@ import SoulmateCalculator from '../components/SoulmateCalculator';
 import BirthdateCompatibility from '../components/BirthdateCompatibility';
 import ZodiacLoveCalculator from '../components/ZodiacLoveCalculator';
 import LoveCalculator from '../components/LoveCalculator';
+import GoogleAdComponent from '../components/GoogleAdComponent';
 interface HomeProps {
     handleComponentClick: (componentName: string) => void;
 }
@@ -24,6 +25,7 @@ const Home: React.FC<HomeProps> = ({ handleComponentClick }) => {
             <p className="text-semibold text-xl text-center highlight mb-6 py-8 text-gray-300">
                 Welcome to Love Test AI. The best, most interactive, and intuitive assortment of love calculators for your enjoyment!
             </p>
+            <GoogleAdComponent />
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div id="love-calculator" onClick={() => handleComponentClick('LoveCalculator')}>
                     <LoveCalculator />
@@ -43,6 +45,7 @@ const Home: React.FC<HomeProps> = ({ handleComponentClick }) => {
                 <div id="numerology-love-calculator" onClick={() => handleComponentClick('NumerologyLoveCalculator')}>
                     <NumerologyLoveCalculator />
                 </div>
+                <GoogleAdComponent />
             </div>
         </>
     );
