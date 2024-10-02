@@ -6,51 +6,10 @@
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
-    <url>
-        <loc>https://lovetestai.com/love-calculator</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/birthdate-compatibility-calculator</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/zodiac-love-calculator</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/soulmate-calculator</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/numerology-love-calculator</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/compatibility-quiz</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://lovetestai.com/privacy-policy</loc>
-        <lastmod>2024-09-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
+
     <url>
         <loc>https://lovetestai.com/love-poem-generator</loc>
-        <lastmod>2024-09-22</lastmod>
+        <lastmod>2024-10-02</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>

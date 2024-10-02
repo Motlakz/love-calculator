@@ -2,21 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Linkedin, Github, Twitter } from "lucide-react";
 import Logo from "./../assets/heartbeat.gif"
-import LoveCalc from "./../assets/budget.png"
-import Zodiac from "./../assets/astrology.png"
-import Birthday from "./../assets/wedding-cost.png"
-import Soulmate from "./../assets/understanding.png"
-import Numerology from "./../assets/numerology.png"
-import LoveQuiz from "./../assets/heart.png"
+// import LoveCalc from "./../assets/budget.png"
+// import Zodiac from "./../assets/astrology.png"
+// import Birthday from "./../assets/wedding-cost.png"
+// import Soulmate from "./../assets/understanding.png"
+// import Numerology from "./../assets/numerology.png"
+// import LoveQuiz from "./../assets/heart.png"
 import LovePoem from "./../assets/love-letter.png"
 
 const calculators = [
-    { name: 'Love Calculator', path: '/love-calculator', imgUrl: LoveCalc },
-    { name: 'Zodiac Love Calculator', path: '/zodiac-love-calculator', imgUrl: Zodiac },
-    { name: 'Birthdate Compatibility', path: '/birthdate-compatibility-calculator', imgUrl: Birthday },
-    { name: 'Soulmate Calculator', path: '/soulmate-calculator', imgUrl: Soulmate },
-    { name: 'Love Quiz', path: '/compatibility-quiz', imgUrl: LoveQuiz },
-    { name: 'Numerology Love Calculator', path: '/numerology-love-calculator', imgUrl: Numerology },
+    // { name: 'Love Calculator', path: '/love-calculator', imgUrl: LoveCalc },
+    // { name: 'Zodiac Love Calculator', path: '/zodiac-love-calculator', imgUrl: Zodiac },
+    // { name: 'Birthdate Compatibility', path: '/birthdate-compatibility-calculator', imgUrl: Birthday },
+    // { name: 'Soulmate Calculator', path: '/soulmate-calculator', imgUrl: Soulmate },
+    // { name: 'Love Quiz', path: '/compatibility-quiz', imgUrl: LoveQuiz },
+    // { name: 'Numerology Love Calculator', path: '/numerology-love-calculator', imgUrl: Numerology },
     { name: 'Love Poem Generator', path: '/love-poem-generator', imgUrl: LovePoem },
 ];
 
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
                         </p>
                     </div>
                     <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-pink-400">Learn More About Our Calculators</h3>
+                        <h3 className="text-lg font-semibold text-pink-400">Check out our other fun tools</h3>
                         <ul className="space-y-2">
                             {calculators.map((calc) => (
                                 <li key={calc.path}>
