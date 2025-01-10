@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Linkedin, Github, Twitter } from "lucide-react";
+import { Linkedin, Github, Twitter, Coffee } from "lucide-react";
 import Logo from "./../assets/heartbeat.gif"
 // import LoveCalc from "./../assets/budget.png"
 // import Zodiac from "./../assets/astrology.png"
@@ -9,6 +9,7 @@ import Logo from "./../assets/heartbeat.gif"
 // import Numerology from "./../assets/numerology.png"
 // import LoveQuiz from "./../assets/heart.png"
 import LovePoem from "./../assets/love-letter.png"
+import { Button } from './ui/button';
 
 const calculators = [
     // { name: 'Love Calculator', path: '/love-calculator', imgUrl: LoveCalc },
@@ -53,6 +54,14 @@ const Footer: React.FC = () => {
                             <Link to="https://www.github.com/in/Motlakz/"><Github className="text-purple-400 hover:text-purple-300 cursor-pointer" /></Link>
                             <Link to="https://www.twitter.com/MotlalepulaSel6/"><Twitter className="text-blue-400 hover:text-blue-300 cursor-pointer" /></Link>
                         </div>
+                        <Button asChild className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <Link to="https://buymeacoffee.com/motlalepulasello" target="_blank" rel="noopener noreferrer">
+                                <div className="flex items-center gap-2">
+                                    <Coffee />
+                                    <span>Buy Me A Coffee</span>
+                                </div>
+                            </Link>
+                        </Button>
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-700 border-opacity-50 flex flex-col md:flex-row justify-between items-center">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown, FaHeart } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaEnvelope, FaChevronDown, FaHeart, FaRegGrinHearts } from 'react-icons/fa';
 import { logEvent, analytics } from '../firebase';
 import { analyzeLoveCompatibility } from '../utils';
 import { loveQuizQuestions, Question } from '../api/loveQuizQuestions';
@@ -255,11 +255,12 @@ const LoveQuizGlassmorphism: React.FC = () => {
                 transition={{ duration: 0.5 }}
             >
                 <motion.h1 
-                    className="highlight text-3xl font-bold mb-6 text-center text-white"
+                    className="highlight text-3xl font-bold mb-6 flex items-center  gap-2 text-center text-white"
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
+                    <FaRegGrinHearts className="mr-2" />
                     Love Compatibility Quiz
                 </motion.h1>
                 <AnimatePresence mode="wait">

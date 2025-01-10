@@ -136,7 +136,7 @@ const ZodiacLoveCalculator: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
                 >
-                   <FaStar className="mr-2" /> Cosmic Love Oracle
+                   <FaStar className="mr-2" /> Zodiac Love Oracle
                 </motion.h1>
                 <ZodiacSelect value={sign1} onChange={setSign1} placeholder="Choose your sign" />
                 <ZodiacSelect value={sign2} onChange={setSign2} placeholder="Choose your partner's sign" />

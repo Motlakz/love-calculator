@@ -11,6 +11,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import LovePoemGenerator from './components/LovePoemGenerator';
 import { FloatingAffiliateShowcase } from './components/AffiliateComponent';
 import { Product, Products } from './types/Products';
+import SupportPopup from './components/SupportModal';
 
 const App: React.FC = () => {
   const [isTrackingEnabled, setIsTrackingEnabled] = useState(false);
@@ -59,6 +60,7 @@ const App: React.FC = () => {
         </div>
         <Footer />
       </div>
+      <SupportPopup />
       <FloatingAffiliateShowcase 
         products={Products}
         scrollThreshold={300}
