@@ -85,7 +85,7 @@ const NativeAdCard = ({
                             >
                                 <img 
                                     src={imageUrl} 
-                                    alt="Product Preview" 
+                                    alt="Love products" 
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 to-transparent" />

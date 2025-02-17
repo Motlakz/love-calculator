@@ -45,7 +45,7 @@ const Home: React.FC<HomeProps> = ({ handleComponentClick }) => {
                     description="Discover amazing products that complement your love calculator experience. Perfect for couples and romance enthusiasts!"
                     cta="View Romantic Gifts"
                     ctaLink="https://amzn.to/4bbuqZl"
-                    imageUrl="/public/butter_rose.jpg"
+                    imageUrl="/butter_rose.jpg"
                 />
 
                 {/* Card 2: Self-Love and Personal Growth */}
@@ -55,7 +55,7 @@ const Home: React.FC<HomeProps> = ({ handleComponentClick }) => {
                     description="Treat yourself to products that inspire self-love and personal growth. Because you deserve it!"
                     cta="Explore Self-love Gifts"
                     ctaLink="https://amzn.to/4b0AOTb"
-                    imageUrl="/public/self_love.jpg"
+                    imageUrl="/self_love.jpg"
                 />
             </motion.div>
             <GoogleAdComponent />
