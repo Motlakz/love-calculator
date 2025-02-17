@@ -9,8 +9,6 @@ import Home from './pages/Home';
 // import CalculatorBlog from './pages/CalculatorBlog';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import LovePoemGenerator from './components/LovePoemGenerator';
-import { FloatingAffiliateShowcase } from './components/AffiliateComponent';
-import { Product, Products } from './types/Products';
 import SupportPopup from './components/SupportModal';
 
 const App: React.FC = () => {
@@ -41,10 +39,6 @@ const App: React.FC = () => {
     setIsTrackingEnabled(false);
   };
 
-  const handleProductClick = (product: Product) => {
-    console.log(`Product clicked: ${product.name}`);
-  };
-
   return (
     <Router>
       <div className="relative min-h-screen overflow-hidden bg-gradient-to-tr from-blue-950 via-purple-950 to-black">
@@ -61,13 +55,6 @@ const App: React.FC = () => {
         <Footer />
       </div>
       <SupportPopup />
-      <FloatingAffiliateShowcase 
-        products={Products}
-        scrollThreshold={300}
-        rotationInterval={4000}
-        onProductClick={handleProductClick}
-        className="custom-showcase"
-      />
       <CookiesModal onAccept={handleAcceptCookies} onDecline={handleDeclineCookies} />
     </Router>
   );
