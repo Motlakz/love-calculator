@@ -6,7 +6,6 @@ import CookiesModal from './components/CookiesModal';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-// import CalculatorBlog from './pages/CalculatorBlog';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import LovePoemGenerator from './components/LovePoemGenerator';
 import SupportPopup from './components/SupportModal';
